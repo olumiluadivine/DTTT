@@ -1,143 +1,149 @@
-def display_game(game_list):
-    # Displaying the TicTacToe Board to players
+def show_board(board):
 
-    print(game_list[0] + ' |' + game_list[1] + ' |' + game_list[2])
-    print('--|--|--')
-    print(game_list[3] + ' |' + game_list[4] + ' |' + game_list[5])
-    print('--|--|--')
-    print(game_list[6] + ' |' + game_list[7] + ' |' + game_list[8])
+    # Displaying of the board
 
-def player_turn():
-    # Assigning either X or O to player 1
+    print(board[1] + '|' + board[2] + '|' + board[3],         '\t1' + '|' + '2' + '|' + '3')
+    print(board[4] + '|' + board[5] + '|' + board[6],         '\t4' + '|' + '5' + '|' + '6')
+    print(board[7] + '|' + board[8] + '|' + board[9],         '\t7' + '|' + '8' + '|' + '9')
 
-    play_1 = ''
-    while play_1 not in ['X', 'O']:
-        play_1 = input('Player 1 "X or O"? \n')
-    return play_1
+def marker():
 
-def player_2(player_1):
-    # Assiginig the opposite from player one
+    # Assigining of X and O to both players
 
-    if player_1 == 'X':
-        play_2 = '0'
+    mark1 = ''
+    while mark1 not in ['X', 'O']:
+        mark1 = input('Enter X or O: ')
+    if mark1 == 'X':
+        return ('X','O')
     else:
-        play_2 = 'X'
-    return play_2
+        return ('O','X')
 
-def index_pick_player_one():
+def placer(mark):
 
-    # Getting the index from the player 1 to put either 'X' or 'O' on the board
-    idx = ''
-    while idx not in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
-        idx = input('Player 1 Enter an Index for board(0 to 8):\n')
-        if idx in ['0', '1', '2', '3', '4', '5', '6', '7', '8']:
-            idx_a = int(idx)
+    # Selection of an Index Between 1 and 9
+
+    while True:
+        try:
+            pl = int(input(f'Enter a number within 1 and 9 for {mark}: '))
+        except:
+            print('Not a number Within 1 and 9')
         else:
-            continue
-        return idx_a
+            if pl not in [1, 2, 3, 4, 5, 6, 7, 8, 9]:
+                continue
+            else:
+                break
+    return pl
 
+def check_space(pl):
 
-def index_pick_player_two():
-    # Getting the index from the player 2 to put either 'X' or 'O' on the board
+    # Checks if the selected index is occupied
 
-    idx2 = ''
-    while idx2 not in [0, 1, 2, 3, 4, 5, 6, 7, 8]:
-        idx2 = input('Player 2 Enter an Index for board(0 to 8):\n')
-        if idx2 in ['0', '1', '2', '3', '4', '5', '6', '7', '8']:
-            idx2_a = int(idx2)
-        else:
-            continue
-        return idx2_a
+    return board[pl] == ' '
 
-def dup_avoid_p1(game_list,idx_a):
+def assign(board,pl,mark):
 
-    # avoids a new input changing an index if X or O is in it
+    # Fixing of X or O on the board
 
-    if game_list[idx_a] == ' ':
-        game_list[idx_a] = p_1
+    if check_space(pl):
+        board[pl] = mark
     else:
-        while (game_list[idx_a] == ' ') is False:
-            idx_a = input('There is a Value in the index you selected... Choose Another Index: \n')
-        game_list[idx_a] = p_1
+        while not check_space(pl):
+            print('There is a Value in The Chosen Index')
+            pl = placer(mark)
+        board[pl] = mark
 
-def dup_avoid_p2(game_list,idx2_a):
-
-    # avoids a new input changing an index if X or O is in it
-
-    if game_list[idx2_a] == ' ':
-        game_list[idx2_a] = p_2
-    else:
-        while (game_list[idx2_a] == ' ') is False:
-            idx2_a = int(input('There is a Value in the index you selected... Choose Another Index: \n'))
-        game_list[idx2_a] = p_2
-
-
-def check_win(game_list,mark):
-
-    # checks if a player has won
-
-    return ((game_list[0] == game_list[1] == game_list[2] == mark) or
-            (game_list[3] == game_list[4] == game_list[5] == mark) or
-            (game_list[6] == game_list[7] == game_list[8] == mark) or
-            (game_list[0] == game_list[3] == game_list[6] == mark) or
-            (game_list[1] == game_list[4] == game_list[7] == mark) or
-            (game_list[2] == game_list[5] == game_list[8] == mark) or
-            (game_list[0] == game_list[4] == game_list[8] == mark) or
-            (game_list[2] == game_list[4] == game_list[6] == mark))
-
-def full_board(game_list):
+def full_board():
 
     # Checks if the board is full
 
-    for i in range(0,9):
-        if game_list[i] == ' ':
+    for i in range(1,10):
+        if board[i] == ' ':
             return False
-
     return True
 
-def new_game():
+def check_win(board,mark):
 
-    # To play a new game
+    # Checks for a winner
 
-    question = ''
-    while question not in ['Y','N']:
-        question = input('Do You Want To Play Again..? Enter "Y" OR "N"')
-    if question == 'Y':
-        pass
-    else:
-        print('Game end')
+    return ((board[1]==board[2]==board[3]==mark) or
+            (board[4]==board[5]==board[6]==mark) or
+            (board[7]==board[8]==board[9]==mark) or
+            (board[1]==board[4]==board[7]==mark) or
+            (board[2]==board[5]==board[8]==mark) or
+            (board[3]==board[6]==board[9]==mark) or
+            (board[1]==board[5]==board[9]==mark) or
+            (board[3]==board[5]==board[7]==mark))
 
 def random_play():
-    from random import randint
-    if randint(0,1) == 0:
+
+    # Selects a random starter
+
+    import random
+    if random.randint(1,2) == 1:
         return 'Player 1'
     else:
         return 'Player 2'
 
+def new_game():
+
+    # To start A new game
+
+    question = ''
+    while question not in ['Y','N']:
+        question = input('Do You Want To Play Again..? Enter "Y" OR "N":  ').upper()
+    return question
+
+
+
 print('Welcome To TicTacToe')
+board = ['#',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+show_board(board)
+p1,p2=marker()
 turn = random_play()
-board = [' ',' ',' ',' ',' ',' ',' ',' ',' ']
-display_game(board)
-p_1 = player_turn()
-p_2 = player_2(p_1)
 game_on = True
 
 while game_on:
     if turn == 'Player 1':
-        a = index_pick_player_one()
-        dup_avoid_p1(board,a)
-        display_game(board)
-        if check_win(board,p_1):
-            print(f'{p_1} won!!')
-            game_on = False
+        pl = placer(p1)
+        check_space(pl)
+        assign(board,pl,p1)
+        show_board(board)
+        if check_win(board,p1) is True:
+            print(f'Congratulations {p1} you won!!')
+            if new_game() == 'Y':
+                board = ['#',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+                continue
+            else:
+                game_on = False
         else:
-            full_board(board)
+            if full_board() is True:
+                print('The game is a draw')
+                if new_game() == 'Y':
+                    board = ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+                    continue
+                else:
+                    game_on = False
+            else:
+                turn = 'Player 2'
     else:
-        b = index_pick_player_two()
-        dup_avoid_p2(board,b)
-        display_game(board)
-        if check_win(board,p_2):
-            print(f'{p_2} won!!')
-            game_on = False
+        p = placer(p2)
+        check_space(p)
+        assign(board, p, p2)
+        show_board(board)
+        if check_win(board, p2) is True:
+            print(f'Congratulations {p2} you won!!')
+            if new_game() == 'Y':
+                board = ['#',' ',' ',' ',' ',' ',' ',' ',' ',' ']
+                continue
+            else:
+                game_on = False
         else:
-            full_board(board)
+            if full_board() is True:
+                print('The game is a draw')
+                if new_game() == 'Y':
+                    board = ['#', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+                    continue
+                else:
+                    game_on = False
+            else:
+                turn = 'Player 1'
